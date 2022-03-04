@@ -1,0 +1,15 @@
+i[class^=icon]{
+    display: inline-block;
+    background-repeat: no-repeat;
+    width: 21px;
+    height: 21px;
+    margin-bottom:-4px;
+    margin-right: 4px;
+    opacity: 0.5;
+}
+
+.icon-aside-home{background-image:url('~@/assets/icons/aside-home.png')}
+.aside-console{background-image:url('~@/assets/icons/aside-console.png')}
+.aside-informtion{background-image:url('~@/assets/icons/aside-informtion.png')}
+.aside-product{background-image:url('~@/assets/icons/aside-product.png')}
+.aside-user{background-image:url('~@/assets/icons/aside-user.png')}

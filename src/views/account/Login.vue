@@ -12,7 +12,9 @@
             </a-form-item>
             
             <a-form-item >
-                <a-button type="primary" @click="check" block> 提交</a-button>
+                <router-link to='/home'>
+                    <a-button type="primary" @click="check" block> 登录</a-button>
+                </router-link>
             </a-form-item>
             <div class="color-white text-center font-12">
                 <a href="#" class="color-white font-12">忘记密码</a> |

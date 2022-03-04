@@ -12,22 +12,30 @@
 
                 <a-form-item :wrapper-col="laout.wrapperCol" has-feedback  name="password">
                     <label >密码</label>
-                    <a-input v-model:value="ruleFormp.password" type="password" autocomplete="off"/>
+                    <a-input v-model:value="ruleFormp.password" type="text" autocomplete="off"/>
                 </a-form-item>
 
-                <a-form-item :wrapper-col="laout.wrapperCol" has-feedback  name="passwords">
+                <a-form-item :wrapper-col="laout.wrapperCol" has-feedback name="passwords">
                     <label >确认密码</label>
-                    <a-input v-model:value="ruleFormp.passwords" />
+                    <a-input type="text" v-model:value="ruleFormp.passwords" />
                 </a-form-item>
 
-                <a-form-item :wrapper-col="laout.wrapperCol" has-feedback  name="passwords">
+                <a-form-item :wrapper-col="laout.wrapperCol" has-feedback>
                     <label >验证码</label>
                     <a-row :gutter='10'>
                         <a-col :span="14">
-                            <a-input v-model:value="ruleFormp.passwords" />
+                            <a-input v-model:value="ruleFormp.code" />
                         </a-col>
                         <a-col :span="10">
-                            <a-button type="primary" block>获取验证码</a-button>
+                            <a-button 
+                            type="primary" 
+                            :loading="loading"
+                            :disabled="disabled"
+                            @click="getcode"
+                            block
+                            >
+                            {{button_text}}
+                            </a-button>
                         </a-col>
                     </a-row>
                 </a-form-item>
@@ -44,7 +52,8 @@
 
 <script>
 import{ reactive,toRefs} from 'vue'
-import checkPhone from '@/utils/verification'
+import {checkPhone,checkPassword} from '@/utils/verification'
+import { message } from 'ant-design-vue';
 export default {
     setup(){
           // 验证手机号
@@ -61,6 +70,34 @@ export default {
             };
 
             // 验证密码
+            const checkword = (rule, value, callback) => {
+               if (!value) {
+                    return Promise.reject('请输入密码');
+                } else {
+                    const ver = checkPassword(value)
+                    if (!ver) {
+                        return Promise.reject('请输入6-20位密码');
+                    }
+                    return Promise.resolve();
+                }
+            };
+
+            // 再次验证密码
+            const checkwords = (rule, value, callback) => {
+               if (!value) {
+                    return Promise.reject('请再次输入密码');
+                } else {
+                    const ver = checkPassword(value)
+                    if (!ver) {
+                        return Promise.reject('请输入6-20位密码');
+                    } else{
+                        if(formItemLayout.ruleFormp.password !== formItemLayout.ruleFormp.passwords){
+                            return Promise.reject('两次输入密码不一致');
+                        }
+                    }
+                    return Promise.resolve();
+                }
+            };
 
             const formItemLayout = reactive({
             laout:{
@@ -72,25 +109,51 @@ export default {
                 userPhone: '',
                 password: '',
                 passwords: '',
+                code:''
             },
             rules: {
-                userPhone: [{required: true,validator: validateName, trigger: 'change' },],
-                password: [{required: true, trigger: 'change' }],
-                passwords: [{required: true, trigger: 'change' }],
+                userPhone: [{required: true,validator: validateName, trigger: 'change' }],
+                password: [{required: true,validator: checkword, trigger: 'change' }],
+                passwords: [{required: true,validator: checkwords, trigger: 'change' }],
+                code:[{ required: true, message: 'Please input your username!' }]
             },
         });
 
+        const data=reactive({
+            button_text:'发送验证码',
+            loading:false,
+            disabled:false,
+            num:60,
+            secint:null
+        })
+
+         const getcode = () =>{
+             if(!formItemLayout.ruleFormp.userPhone){
+                 message.warning('用户名不能为空');
+                 return false
+             }
+                if(data.secint){
+                    clearInterval(data.secint)
+                }
+               data.secint = setInterval(() => {
+                   const s = data.num--;
+                    data.button_text=`${s}秒`
+                    if(data.num == 0){
+                        clearInterval(data.secint)
+                    }
+               }, 1000);
+            }
 
         const handleFinish = () => {
             console.log('参数2',formItemLayout.ruleFormp.userPhone)
-            console.log('参数2',formItemLayout.ruleFormp.password)
-            console.log('参数2',formItemLayout.ruleFormp.passwords)
         };
 
         // const data = toRefs(formItemLayout);
         return{
             ...toRefs(formItemLayout),
-            handleFinish
+            ...toRefs(data),
+            handleFinish,
+            getcode
             }
     }
 };
