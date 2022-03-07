@@ -5,7 +5,7 @@ module.exports = defineConfig({
   lintOnSave: false,
   // svg图标配置
   chainWebpack: config => {
-    config.module.rules.delete('svg'); //重点:删除默认配置中处理svg,
+    config.module.rules.delete('svg'); //删除默认配置中处理svg,
     config.module
         .rule('svg-sprite-loader')
         .test(/\.svg$/)
