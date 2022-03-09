@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="logo">
-      <img :src="logo" alt="企业级管理后台">
+      <img v-if="collapseval" :src="logo2" alt="企业级管理后台">
+      <img v-else  :src="logo" alt="企业级管理后台">
     </div>
     <a-menu
       v-model:openKeys="openKeys"
@@ -14,9 +15,11 @@
     <!-- 一级菜单 -->
       <template v-for="item in routers" :key="item.path">
          <template v-if='!item.hidden'>
-              <a-menu-item v-if='!item.children ' :key="item.path">
-              <i class='icon icon-aside-home' :class="item.meta.icon"></i>
-              <router-link :to='item.path'>{{item.meta && item.meta.title}} </router-link>
+              <a-menu-item v-if='hasOnlyChildren(item) ' :key="item.path">
+                <router-link :to='item.path'>
+                  <span class="anticon"><svg-icon :iconName='item.meta && item.meta.icon' :className="aside-svg"></svg-icon></span>
+                  <span>{{item.meta && item.meta.title}} </span>
+              </router-link>
             </a-menu-item>
           <!--二级菜单  -->
               <Menu :menu='item' v-else :key="item.path"/>
@@ -34,7 +37,13 @@ export default({
   components: {
     MailOutlined,
     InboxOutlined,
-    Menu
+    Menu,
+  },
+  props:{
+    collapseval:{
+      type:Boolean,
+      default:false
+    }
   },
 
   setup() {
@@ -43,9 +52,10 @@ export default({
     const state = reactive({
       // 菜单状态
       selectedKeys:localStorage.getItem('selectedKeys') ? [localStorage.getItem('selectedKeys') ] : [ ] ,
-      openKeys: localStorage.getItem('openKey') ? [localStorage.getItem('openKey')] :[],
+      openKeys: localStorage.getItem('openKeys') ? JSON.parse(localStorage.getItem('openKeys')) :[],
       // logo
-     logo: require ('@/assets/images/logo.png')
+     logo: require ('@/assets/images/logo.png'),
+     logo2: require ('@/assets/images/logo2.png')
     });
 
     const toggleCollapsed = () => {
@@ -56,7 +66,23 @@ export default({
     };
 
     const openMenu = (openKeys)=>{
-      localStorage.setItem('openKey',openKeys)
+      localStorage.setItem('openKeys',JSON.stringify(openKeys))
+    }
+
+    // 检测是否只有一个子路由
+    const hasOnlyChildren = (data) => {
+      // 不存在子集的情况
+      if(!data.children){
+        return false
+      }
+      // 过滤隐藏的子集路由
+      const routers = data.children.filter(item => item.hidden ? false : true);
+      // 判断最终结果
+      if(routers.length === 1){
+        return true
+      }else{
+        return false
+      }
     }
 
     return { 
@@ -64,7 +90,8 @@ export default({
       toggleCollapsed,
       routers,
       seleceMenu,
-      openMenu
+      openMenu,
+      hasOnlyChildren
     };
   },
 

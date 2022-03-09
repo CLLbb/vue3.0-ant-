@@ -24,16 +24,26 @@ const routes = [
     name: "Home",
     meta:{
       title:'首页',
-      icon:'icon-aside-home'
+      icon:'home'
     },
     component: () => import('@/views/layout/Index'),
+    children:[
+      {
+        path:'/home',
+        name:'home',
+        meta:{
+          title:'首页'
+        },
+        component:() => import('@/views/home/Index')
+      }
+    ],
   },
   {
     path: "/admin",
     name: "Admin",
     meta:{
       title:'管理总台',
-      icon:'aside-console'
+      icon:'console'
     },
     component: () => import('@/views/layout/Index'),
     children:[
@@ -61,7 +71,7 @@ const routes = [
     name:'News',
     meta:{
       title:'信息管理',
-      icon:'aside-informtion'
+      icon:'info'
     },
     component: () => import('@/views/layout/Index'),
   },
@@ -70,7 +80,7 @@ const routes = [
     name:'User2',
     meta:{
       title:'用户管理',
-      icon:'aside-user'
+      icon:'user'
     },
     component: () => import('@/views/layout/Index'),
   },
@@ -79,7 +89,7 @@ const routes = [
     name:'Project',
     meta:{
       title:'产品管理',
-      icon:'aside-product'
+      icon:'product'
     },
     component: () => import('@/views/layout/Index'),
   }

@@ -1,10 +1,10 @@
 <template>
     <a-sub-menu :key="menu.path">
         <template #title>
-            <span>
-                <i class='icon icon-aside-home' :class="menu.meta.icon"></i>
-                {{ menu.meta && menu.meta.title }}
+            <span class="anticon">
+                 <svg-icon :iconName='menu.meta && menu.meta.icon' :className="aside-svg"></svg-icon>
             </span>
+            <span> {{ menu.meta && menu.meta.title }}</span>
         </template>
         <template v-for='item in menu.children' >
             <a-menu-item v-if='!item.children' :key='item.path'>
@@ -15,9 +15,13 @@
     </a-sub-menu>
 </template>
 <script>
+// import SvgIcon from '@/components/Svgicon/Index.vue' 
 
-export default({
+export default{
     name:'menu',
+//     components: {
+//     SvgIcon 
+//   },
     props:{
         menu:{
             type:Object,
@@ -26,7 +30,7 @@ export default({
     },
     setup() {
     },
-})
+}
 </script>
 <style scoped>
 

@@ -15,6 +15,7 @@
                 <router-link to='/home'>
                     <a-button type="primary" @click="check" block> 登录</a-button>
                 </router-link>
+                <a-button type="primary" @click="testbutton" block> 测试</a-button>
             </a-form-item>
             <div class="color-white text-center font-12">
                 <a href="#" class="color-white font-12">忘记密码</a> |
@@ -26,14 +27,27 @@
 </template>
 
 <script>
-import{ reactive} from 'vue'
+import{ reactive,getCurrentInstance} from 'vue'
+import { getCode } from '@/api/account'
 export default {
     setup(){
+        const {proxy} = getCurrentInstance()
+        const submit = ()=>{
+            proxy.$axios.post('getSms')
+        }
         const formItemLayout = reactive({
         labelCol: { span: 24},
         wrapperCol: { span:24 },
         }) ;
-        return{formItemLayout}
+
+        const testbutton= () =>{
+            getCode().then()
+        }
+        return{
+            formItemLayout,
+            submit,
+            testbutton
+            }
     }
 };
 </script>

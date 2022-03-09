@@ -1,5 +1,6 @@
 <template>
     <div class="header">
+        <svg-icon class="svg-class" iconName='collapse' @click='collapsedval()'></svg-icon>
         <div class="header_user">
             <a-dropdown>
                 <a class="ant-dropdown-link" @click.prevent>
@@ -30,10 +31,12 @@
 </template>
 <script>
 import { useI18n } from 'vue-i18n'
-import { reactive,toRefs} from 'vue'
+import { reactive,toRefs ,getCurrentInstance} from 'vue'
 export default{
     setup(){
         const { locale } = useI18n( {useScope : 'global'});
+
+        const {emit} = getCurrentInstance();
 
         const data = reactive({
             lang:[
@@ -41,7 +44,11 @@ export default{
                 {label:'EN',value:'en'}
             ],
             lang_current:'ch'
-        })
+        });
+
+        const collapsedval = () => {
+             emit('handle')
+        }
 
         const togglelang = (lang)=>{
             locale.value=lang;
@@ -49,18 +56,23 @@ export default{
         }
         return{
             ...toRefs(data),
-            togglelang
+            togglelang,
+            collapsedval
         }
     }
 }
 </script>
 <style scoped>
     .header{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         height: 64px;
         padding: 0 20px;
     }
-    .header_user{
-        text-align: right;
+    .svg-class{
+        cursor: pointer;
+        z-index: 10000;
     }
     .current{
         color: #ea1c5b;

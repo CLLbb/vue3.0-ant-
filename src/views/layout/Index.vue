@@ -1,17 +1,16 @@
 <template>
   <a-layout>
     <a-layout-sider
-      breakpoint="lg"
-      collapsed-width="0"
-      @collapse="onCollapse"
-      @breakpoint="onBreakpoint"
+      :collapsed="collapsed"
+      :trigger='null'
+      collapsiblez
     >
-      <div class="logo" />
-      <Aside/>
+    <div class="logo" />
+      <Aside :collapseval="collapsed"/>
     </a-layout-sider>
     <a-layout>
       <a-layout-header :style="{ background: '#fff', padding: 0 }" >
-        <Header/>
+        <Header @handle='handleCollapse'/>
       </a-layout-header>
       <a-layout-content :style="{background: '#fff', margin: '24px 16px 0' }">
        <Content/>
@@ -34,19 +33,29 @@ export default defineComponent({
     Header,
     Content
   },
-  setup() {
+  setup(props) {
     const onCollapse = () => {
       console.log();
     };
+
+    const collapsed = ref(localStorage.getItem("collapsed")?localStorage.getItem("collapsed"):false);
 
     const onBreakpoint = () => {
       console.log();
     };
 
+    const handleCollapse = () => {
+      collapsed.value = !collapsed.value
+      localStorage.setItem('collapsed',collapsed.value)
+      console.log('存储值:',typeof(localStorage.getItem("collapsed")))
+    }
+
     return {
       selectedKeys: ref(['4']),
       onCollapse,
       onBreakpoint,
+      collapsed,
+      handleCollapse
     };
   },
 });
