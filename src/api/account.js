@@ -2,8 +2,8 @@ import service from "@/utils/request";
 
 export function getCode(val){
     service.request({
-        url:'/account/login/',
-        method:'get',
+        url:'/send/',
+        method:'post',
         params:val  //params传参用于get请求
     })
 }

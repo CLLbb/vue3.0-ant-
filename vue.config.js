@@ -1,5 +1,8 @@
 const path = require('path');
+const { env } = require('process');
 module.exports = {
+  publicPath: process.env.NODE_ENV === 'production'? '': './',
+  outputDir:process.env.NODE_ENV === 'production'? 'dist': 'devDist',
   transpileDependencies: true,
   lintOnSave: false,
   // svg图标配置
@@ -31,12 +34,12 @@ module.exports = {
     host:'0.0.0.0',//是否可以允许外部访问
     port:8000,
     proxy: {
-      '/devAPI': {
-        target: 'http://account.web-jshtml.cn/api/v1',
+      [process.env.VUE_APP_FLAG]: {
+        target: process.env.VUE_APP_APIURL,
         ws: false, //是否开启webstock
         changeOrigin: true,//是否开启跨域
         pathRewrite:{ //路径重写
-          "^devAPI":'' //查找开头为/api的字符替换成空字符串
+          [`^${process.env.VUE_APP_FLAG}`]:'' //查找开头为/api的字符替换成空字符串
         }
       }
     }

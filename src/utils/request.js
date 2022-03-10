@@ -1,8 +1,10 @@
 import axios from 'axios';
 const service = axios.create({
-    baseURL: '/devAPI',
+    baseURL: process.env.VUE_APP_FLAG,
     timeout: 5000,
   });
+
+  console.log('环境变量',process.env.VUE_APP_FLAG)
 
   // 添加请求拦截器
 service.interceptors.request.use(function (config) {

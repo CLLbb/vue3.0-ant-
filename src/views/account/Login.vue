@@ -41,7 +41,7 @@ export default {
         }) ;
 
         const testbutton= () =>{
-            getCode().then()
+            getCode()
         }
         return{
             formItemLayout,
