@@ -54,6 +54,8 @@
 import{ reactive,toRefs} from 'vue'
 import {checkPhone,checkPassword} from '@/utils/verification'
 import { message } from 'ant-design-vue';
+import {register} from '@/api/account'
+import md5 from 'js-md5'
 export default {
     setup(){
           // 验证手机号
@@ -106,10 +108,10 @@ export default {
             },
 
             ruleFormp: {
-                userPhone: '',
-                password: '',
-                passwords: '',
-                code:''
+                userPhone: '18599999999',
+                password: '9lw222222',
+                passwords: '9lw222222',
+                code:'1234'
             },
             rules: {
                 userPhone: [{required: true,validator: validateName, trigger: 'change' }],
@@ -145,6 +147,16 @@ export default {
             }
 
         const handleFinish = () => {
+            const registerForm = {
+                username:formItemLayout.ruleFormp.userPhone,
+                password:md5(formItemLayout.ruleFormp.password),
+                code:formItemLayout.ruleFormp.code
+            }
+            register(registerForm).then(res => {
+                console.log('注册',res,result)
+            }).catch(err => {
+                console.log('注册',res,result)
+            })
             console.log('参数2',formItemLayout.ruleFormp.userPhone)
         };
 
