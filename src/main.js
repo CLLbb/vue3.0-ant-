@@ -6,6 +6,9 @@ import store from "./store";
 import Antd from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
 
+// 路由拦截
+// import "./router/permit"
+
 // 引入svg
 import './js/svg'
 import SvgIcon from '@/components/Svgicon/Index.vue'

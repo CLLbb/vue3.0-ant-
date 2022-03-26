@@ -6,7 +6,7 @@
       collapsiblez
     >
     <div class="logo" />
-      <Aside :collapseval="collapsed"/>
+      <Aside v-model:collapseval="collapsed"/>
     </a-layout-sider>
     <a-layout>
       <a-layout-header :style="{ background: '#fff', padding: 0 }" >
@@ -35,19 +35,16 @@ export default defineComponent({
   },
   setup(props) {
     const onCollapse = () => {
-      console.log();
     };
 
-    const collapsed = ref(localStorage.getItem("collapsed")?localStorage.getItem("collapsed"):false);
+    const collapsed = ref(localStorage.getItem("collapsed")?Boolean(localStorage.getItem("collapsed")):false);
 
     const onBreakpoint = () => {
-      console.log();
     };
 
     const handleCollapse = () => {
       collapsed.value = !collapsed.value
       localStorage.setItem('collapsed',collapsed.value)
-      console.log('存储值:',typeof(localStorage.getItem("collapsed")))
     }
 
     return {

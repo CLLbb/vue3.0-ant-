@@ -5,7 +5,6 @@
             <a-dropdown>
                 <a class="ant-dropdown-link" @click.prevent>
                 <img src="@/assets/images/face.png" alt="">
-                <DownOutlined />
                 </a>
                 <template #overlay>
                 <a-menu>

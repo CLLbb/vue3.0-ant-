@@ -17,12 +17,12 @@
          <template v-if='!item.hidden'>
               <a-menu-item v-if='hasOnlyChildren(item) ' :key="item.path">
                 <router-link :to='item.path'>
-                  <span class="anticon"><svg-icon :iconName='item.meta && item.meta.icon' :className="aside-svg"></svg-icon></span>
+                  <span class="anticon"><svg-icon :iconName='item.meta && item.meta.icon' ></svg-icon></span>
                   <span>{{item.meta && item.meta.title}} </span>
               </router-link>
             </a-menu-item>
           <!--二级菜单  -->
-              <Menu :menu='item' v-else :key="item.path"/>
+              <MenuSide :menu='item' v-else :key="item.path"/>
          </template>
       </template>   
     </a-menu>
@@ -31,13 +31,13 @@
 <script>
 import {  reactive, toRefs, watch } from 'vue';
 import { useRoute , useRouter} from 'vue-router';
-import Menu from './Menu.vue'
+import MenuSide from './MenuSide.vue'
 import {  MailOutlined, InboxOutlined} from '@ant-design/icons-vue';
 export default({
   components: {
     MailOutlined,
     InboxOutlined,
-    Menu,
+    MenuSide,
   },
   props:{
     collapseval:{

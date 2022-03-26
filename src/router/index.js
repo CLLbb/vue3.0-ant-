@@ -63,6 +63,14 @@ const routes = [
         },
         component:() => import('@/views/admin/User'),
       },
+      {
+        path:'/menu',
+        name:'Menu',
+        meta:{
+          title:'菜单管理'
+        },
+        component:() => import('@/views/admin/Menu'),
+      },
     ]
   },
   // 新闻中心
@@ -75,6 +83,8 @@ const routes = [
     },
     component: () => import('@/views/layout/Index'),
   },
+
+  // 用户管理
   {
     path:'/user2',
     name:'User2',
@@ -84,6 +94,8 @@ const routes = [
     },
     component: () => import('@/views/layout/Index'),
   },
+
+  // 产品管理
   {
     path:'/project',
     name:'Project',

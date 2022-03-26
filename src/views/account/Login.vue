@@ -31,7 +31,7 @@ import{ reactive,getCurrentInstance} from 'vue'
 import { getCode } from '@/api/account'
 export default {
     setup(){
-        const {proxy} = getCurrentInstance()
+        const { proxy } = getCurrentInstance()
         const submit = ()=>{
             proxy.$axios.post('getSms')
         }
