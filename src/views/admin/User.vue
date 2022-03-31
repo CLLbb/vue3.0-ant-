@@ -10,24 +10,24 @@
                 >
                     <a-form-item label='角色类型'>
                         <a-select v-model:value="formsearch.role" style="width: 120px">
-                            <a-select-option value="lucy">lucy</a-select-option>
-                            <a-select-option value="lucy">2</a-select-option>
-                            <a-select-option value="lucy">3</a-select-option>
+                            <a-select-option value="1">lucy</a-select-option>
+                            <a-select-option value="2">2</a-select-option>
+                            <a-select-option value="3">3</a-select-option>
                         </a-select>
                     </a-form-item>
 
                     <a-form-item label='状态'>
                         <a-select v-model:value="formsearch.role" style="width: 120px">
-                            <a-select-option value="lucy">禁用</a-select-option>
-                            <a-select-option value="lucy">启用</a-select-option>
+                            <a-select-option value="1">禁用</a-select-option>
+                            <a-select-option value="2">启用</a-select-option>
                         </a-select>
                     </a-form-item>
 
                     <a-form-item label='关键字'>
                         <a-select v-model:value="formsearch.role" style="width: 120px">
-                            <a-select-option value="lucy">lucy</a-select-option>
-                            <a-select-option value="lucy">2</a-select-option>
-                            <a-select-option value="lucy">3</a-select-option>
+                            <a-select-option value="1">1</a-select-option>
+                            <a-select-option value="2">2</a-select-option>
+                            <a-select-option value="3">3</a-select-option>
                         </a-select>
                     </a-form-item>
                     <a-form-item>
@@ -45,16 +45,16 @@
            </a-col>
        </a-row>
 
-       <user-modal v-model:visible="visibleModal" v-model:title="title"></user-modal>
+       <user-modal v-model:visible="visibleModal" v-model:id="rowId" ></user-modal>
 
         <!-- 表格数据 -->
         <a-table :row-selection="{ selectedRowKeys: datalayout.selectedRowKeys, onChange: onSelectChange }"  :columns="datalayout.columns" :data-source="datalayout.dataSource" bordered>
-            <template #status="{text}">
-                <a-switch v-model:checked="checked" />
+            <template #status="{ text,record }">
+                <a-switch :checked="!!text" @change='handleswitch(record)'/>
             </template>
 
-            <template #control class="control_button">
-                <a-button type="primary" @click="showEditModal">编辑</a-button>
+            <template #control = "{record}" class="control_button">
+                <a-button type="primary" @click="showEditModal(record)">编辑</a-button>
                 <a-button type="primary" danger>删除</a-button>
                 <a-button type="default">详情</a-button>
             </template>
@@ -98,43 +98,24 @@ export default{
             dataSource:[
                 {
                     key: '1',
+                    id:'1',
                     name: 'John Brown',
                     age: 32,
                     address: 'London No. 1 Lake Park',
-                    status:true
+                    status:0
                 }, {
+                    id:'2',
                     key: '2',
                     name: 'Jim Green',
                     age: 42,
                     address: 'London No. 1 Lake Park',
-                    status:true
-                }, {
-                    key: '3',
-                    name: 'Joe Black',
-                    age: 32,
-                    tel: '0575-22098909',
-                    phone: 18900010002,
-                    address: 'Sidney No. 1 Lake Park',
-                }, {
-                    key: '4',
-                    name: 'Jim Red',
-                    age: 18,
-                    tel: '0575-22098909',
-                    phone: 18900010002,
-                    address: 'London No. 2 Lake Park',
-                }, {
-                    key: '5',
-                    name: 'Jake White',
-                    age: 18,
-                    tel: '0575-22098909',
-                    phone: 18900010002,
-                    address: 'Dublin No. 2 Lake Park',
-                    }
-            ],
+                    status:1
+                }],
             selectedRowKeys: [],
         })
         
         let visibleModal = ref(false)
+        let rowId = ref(null)
 
         const checked = ref(false)
         const title=ref('')
@@ -145,12 +126,17 @@ export default{
             status:'',
             keywords:'',
             inputKeyWords:'',
-            title
+            title,
         })
 
         const onSelectChange = selectedRowKeys => {
             datalayout.selectedRowKeys = selectedRowKeys;
             };
+
+        const handleswitch = (data) => {
+            console.log('switch',data);
+            data.status = !data.status
+        }
 
         const showAddModal = () =>{
             visibleModal.value = true
@@ -158,10 +144,10 @@ export default{
             console.log('新增用户',title.value)
         }
 
-        const showEditModal = ()=>{
+        const showEditModal = (recores)=>{
             visibleModal.value = true
-            title.value='编辑'
-            console.log('编辑',title.value)
+            rowId.value = recores.id
+            console.log('编辑',rowId.value)
         }
 
         return{
@@ -169,9 +155,11 @@ export default{
             formsearch,
             visibleModal,
             checked,
+            rowId,
             onSelectChange,
             showAddModal,
-            showEditModal
+            showEditModal,
+            handleswitch
             }
         },   
     }
