@@ -81,6 +81,17 @@ export default {
             console.log('idzhi',newValue)
         })
 
+        const getUserInfo = () => {
+            UserInfo(form).then( res => {
+                // formState是表单对象,[]里面放需要转换的字段
+                requestDataFormat({
+                    data:res.result,
+                    form:formState,
+                    match:['status','type']
+                }); 
+            })
+        }
+
         const close = () =>{
             Reset()
         }

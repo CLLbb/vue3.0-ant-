@@ -37,6 +37,7 @@
                         <a-button type="primary">搜索</a-button>
                         <a-button type="primary">重置</a-button>
                         <a-button type="primary">导出</a-button>
+                        <a-button type="primary" @click="deleFormcode">删除</a-button>
                     </a-form-item>
                 </a-form>
            </a-col>
@@ -48,7 +49,13 @@
        <user-modal v-model:visible="visibleModal" v-model:id="rowId" ></user-modal>
 
         <!-- 表格数据 -->
-        <a-table :row-selection="{ selectedRowKeys: datalayout.selectedRowKeys, onChange: onSelectChange }"  :columns="datalayout.columns" :data-source="datalayout.dataSource" bordered>
+        <a-table 
+            :row-selection="{ selectedRowKeys: datalayout.selectedRowKeys, onChange: onSelectChange }"  
+            :columns="datalayout.columns" 
+            :data-source="datalayout.dataSource" 
+            bordered 
+            :pagination="false"
+        >
             <template #status="{ text,record }">
                 <a-switch :checked="!!text" @change='handleswitch(record)'/>
             </template>
@@ -59,12 +66,29 @@
                 <a-button type="default">详情</a-button>
             </template>
         </a-table>
+        <a-config-provider :locale="locale">
+            <a-pagination
+                v-model:current="current"
+                v-model:page-size="pageSize"
+                show-quick-jumper
+                :page-size-options="pageSizeOptions"
+                :total="total"
+                show-size-changer
+                @showSizeChange="onShowSizeChange"
+            >
+                <template #buildOptionText="props">
+                <span v-if="props.value !== '50'">{{ props.value }}条/页</span>
+                <span v-else>全部</span>
+                </template>
+            </a-pagination>
+        </a-config-provider>
      </a-card>
 </template>
 
 <script>
 import { reactive ,ref } from "@vue/reactivity";
 import UserModal from "@/components/Modal/UserModal.vue"
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 
 export default{
     components:{
@@ -116,9 +140,20 @@ export default{
         
         let visibleModal = ref(false)
         let rowId = ref(null)
+        const locale = zhCN
 
         const checked = ref(false)
         const title=ref('')
+
+        const pageSizeOptions = ref(['10', '20', '30', '40', '50']);
+        const current = ref(1);
+        const pageSizeRef = ref(10);
+        const total = ref(50);
+
+        const onShowSizeChange = (current, pageSize) => {
+        console.log(current, pageSize);
+        pageSizeRef.value = pageSize;
+        };
 
         // 搜索框数据
         const formsearch = reactive({
@@ -131,6 +166,10 @@ export default{
 
         const onSelectChange = selectedRowKeys => {
             datalayout.selectedRowKeys = selectedRowKeys;
+            };
+
+        const onChange = pageNumber => {
+            console.log('Page: ', pageNumber);
             };
 
         const handleswitch = (data) => {
@@ -147,7 +186,17 @@ export default{
         const showEditModal = (recores)=>{
             visibleModal.value = true
             rowId.value = recores.id
-            console.log('编辑',rowId.value)
+            console.log('编辑',recores)
+        }
+
+        const deleFormcode = () => {
+            for(let k in formsearch){
+                 console.log('搜索框字段：',formsearch[k])
+            }
+            delete formsearch.role
+            for(let k in formsearch){
+                 console.log('搜索删除后框字段：',formsearch[k])
+            }
         }
 
         return{
@@ -159,7 +208,14 @@ export default{
             onSelectChange,
             showAddModal,
             showEditModal,
-            handleswitch
+            handleswitch,
+            deleFormcode,
+            current,
+            onChange,
+            total,
+            pageSizeOptions,
+            onShowSizeChange,
+            locale
             }
         },   
     }
